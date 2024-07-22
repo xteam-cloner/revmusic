@@ -78,7 +78,7 @@ async def _vPlay(_, message):
                     "Kindly reply to a video file or give song name/yt link"
                 )
                 return
-            await m.edit("Rukja...Tera Video Play kar raha hu...")
+            await m.edit("Please wait.. Playing your video in a while")
             Status, Text = await userbot.playVideo(chat_id, input_filename)
             if Status == False:
                 await m.edit(Text)
@@ -99,7 +99,7 @@ async def _vPlay(_, message):
                 finish_time = time.time()
                 total_time_taken = str(int(finish_time - start_time)) + "s"
                 await m.edit(
-                    f"Playing your video\n\nVideoName:- [{message.reply_to_message.video.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.video.duration}\nTime taken to play:- {total_time_taken}",
+                    f"Playing your video\n\nVideoName:- [{message.reply_to_message.video.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.video.duration}\nTime taken to play:- {total_time_taken}\n\n Powered by: @moonuserbot",
                     disable_web_page_preview=True,
                 )
 

@@ -78,7 +78,7 @@ async def _aSkip(_, message):
                 return await app.send_message(chat_id, f"Error:- <code>{e}</code>")
     else:
         return await message.reply_text(
-            "Abe saale... (Maaf karna wo gusse me thora sa idhar udhar ho jata hu) terepe perms naa hai admins ko bol..."
+            "Sorry, because of users misuse, only admins are allowed to use this command!"
         )
 
 

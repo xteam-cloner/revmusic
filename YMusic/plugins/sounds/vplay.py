@@ -1,15 +1,12 @@
-from YMusic import app, call
+from YMusic import app
 from YMusic.core import userbot
 from YMusic.utils import ytDetails
 from YMusic.utils.queue import QUEUE, add_to_queue
-from YMusic.misc import SUDOERS
 
-from pyrogram import filters, enums
+from pyrogram import filters
 
-from pytgcalls.types import MediaStream
 
 import asyncio
-import random
 import time
 
 import config

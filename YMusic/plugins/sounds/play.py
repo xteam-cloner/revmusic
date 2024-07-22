@@ -43,7 +43,7 @@ async def bash(cmd):
 async def processReplyToMessage(message):
     msg = message.reply_to_message
     if msg.audio or msg.voice:
-        m = await message.reply_text("Rukja...Tera Audio Download kar raha hu...")
+        m = await message.reply_text("Please wait... Downloading your song...")
         audio_original = await msg.download()
         input_filename = audio_original
         return input_filename, m
@@ -68,10 +68,10 @@ async def _aPlay(_, message):
             input_filename, m = await processReplyToMessage(message)
             if input_filename is None:
                 await message.reply_text(
-                    "Audio pe reply kon karega mai? ya phir song link kon dalega mai? 🤔"
+                    "Please reply to an audio file or provide song name/yt link"
                 )
                 return
-            await m.edit("Rukja...Tera Audio Play karne vala hu...")
+            await m.edit("Please wait... Playing your song in a while...")
             Status, Text = await userbot.playAudio(chat_id, input_filename)
             if Status == False:
                 await m.edit(Text)
@@ -85,19 +85,19 @@ async def _aPlay(_, message):
                         message.reply_to_message.link,
                     )
                     await m.edit(
-                        f"# {queue_num}\n{message.reply_to_message.audio.title[:19]}\nTera gaana queue me daal diya hu"
+                        f"# {queue_num}\n{message.reply_to_message.audio.title[:19]}\nYour song has been added to the queue!"
                     )
                     return
                 finish_time = time.time()
                 total_time_taken = str(int(finish_time - start_time)) + "s"
                 await m.edit(
-                    f"Tera gaana play kar rha hu aaja vc\n\nSongName:- [{message.reply_to_message.audio.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.audio.duration}\nTime taken to play:- {total_time_taken}",
+                    f"Playing your song\n\nSongName:- [{message.reply_to_message.audio.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.audio.duration}\nTime taken to play:- {total_time_taken}\n\n Powered by: @moonuserbot",
                     disable_web_page_preview=True,
                 )
     elif (len(message.command)) < 2:
-        await message.reply_text("Song name kon dalega mai? 🤔")
+        await message.reply_text("PLease enter song name or yt link")
     else:
-        m = await message.reply_text("Rukja...Tera gaana dhund raha hu...")
+        m = await message.reply_text("Searching for your song")
         query = message.text.split(" ", 1)[1]
         try:
             if "youtu.be" in query:
@@ -112,7 +112,7 @@ async def _aPlay(_, message):
             await message.reply_text(f"Error:- <code>{e}</code>")
             return
 
-        await m.edit("Rukja...Tera gaana download kar raha hu...")
+        await m.edit("Found the match... Downloading your song...")
         format = "bestaudio"
         resp, songlink = await ytdl(format, link)
         if resp == 0:
@@ -121,7 +121,7 @@ async def _aPlay(_, message):
             if chat_id in QUEUE:
                 queue_num = add_to_queue(chat_id, title[:19], duration, songlink, link)
                 await m.edit(
-                    f"# {queue_num}\n{title[:19]}\nTera gaana queue me daal diya hu"
+                    f"# {queue_num}\n{title[:19]}\nYour song has been added to the queue"
                 )
                 return
             # await asyncio.sleep(1)
@@ -135,7 +135,7 @@ async def _aPlay(_, message):
                 finish_time = time.time()
                 total_time_taken = str(int(finish_time - start_time)) + "s"
                 await m.edit(
-                    f"Tera gaana play kar rha hu aaja vc\n\nSongName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}",
+                    f"Playing your song\n\nSongName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}",
                     disable_web_page_preview=True,
                 )
 
@@ -167,6 +167,6 @@ async def _raPlay(_, message):
                 finish_time = time.time()
                 total_time_taken = str(int(finish_time - start_time)) + "s"
                 await m.edit(
-                    f"Tera gaana play kar rha hu aaja vc\n\nSongName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}",
+                    f"Playing your song\n\nSongName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}\n\n Powered by: @moonuserbot",
                     disable_web_page_preview=True,
                 )

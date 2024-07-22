@@ -53,7 +53,7 @@ async def bash(cmd):
 async def processReplyToMessage(message):
     msg = message.reply_to_message
     if msg.video or msg.video_note:
-        m = await message.reply_text("Rukja...Tera Video Download kar raha hu...")
+        m = await message.reply_text("Please wait... downloading your video...")
         video_original = await msg.download()
         return video_original, m
     else:
@@ -94,7 +94,7 @@ async def _vPlay(_, message):
             input_filename, m = await processReplyToMessage(message)
             if input_filename is None:
                 await message.reply_text(
-                    "Video pe reply kon karega mai? ya phir video link kon dalega mai? 🤔"
+                    "Kindly reply to a video file or give song name/yt link"
                 )
                 return
             await m.edit("Rukja...Tera Video Play kar raha hu...")
@@ -112,20 +112,20 @@ async def _vPlay(_, message):
                         message.reply_to_message.link,
                     )
                     await m.edit(
-                        f"# {queue_num}\n{message.reply_to_message.video.title[:19]}\nTera video queue me daal diya hu"
+                        f"# {queue_num}\n{message.reply_to_message.video.title[:19]}\nYour song has been added to the queue"
                     )
                     return
                 finish_time = time.time()
                 total_time_taken = str(int(finish_time - start_time)) + "s"
                 await m.edit(
-                    f"Tera video play kar rha hu aaja vc\n\nVideoName:- [{message.reply_to_message.video.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.video.duration}\nTime taken to play:- {total_time_taken}",
+                    f"Playing your video\n\nVideoName:- [{message.reply_to_message.video.title[:19]}]({message.reply_to_message.link})\nDuration:- {message.reply_to_message.video.duration}\nTime taken to play:- {total_time_taken}",
                     disable_web_page_preview=True,
                 )
 
     elif (len(message.command)) < 2:
-        await message.reply_text("Link kon daalega mai? 🤔")
+        await message.reply_text("Kindly provide song name or link")
     else:
-        m = await message.reply_text("Rukja...Tera video dhund raha hu...")
+        m = await message.reply_text("Please wait finding your song")
         query = message.text.split(" ", 1)[1]
         try:
             if "youtu.be" in query:
@@ -140,7 +140,7 @@ async def _vPlay(_, message):
             await message.reply_text(f"Error:- <code>{e}</code>")
             return
 
-        await m.edit("Rukja...Tera video download kar raha hu...")
+        await m.edit("Please wait downloading video of requested song")
         resp, ytlink = await ytdl(link)
         if resp == 0:
             await m.edit(f"❌ yt-dl issues detected\n\n» `{ytlink}`")
@@ -148,7 +148,7 @@ async def _vPlay(_, message):
             if chat_id in QUEUE:
                 queue_num = add_to_queue(chat_id, title[:19], duration, ytlink, link)
                 await m.edit(
-                    f"# {queue_num}\n{title[:19]}\nTera Video queue me daal diya hu"
+                    f"# {queue_num}\n{title[:19]}\nYour song has been added to the queue"
                 )
                 return
             # await asyncio.sleep(2)
@@ -166,6 +166,6 @@ async def _vPlay(_, message):
         finish_time = time.time()
         total_time_taken = str(int(finish_time - start_time)) + "s"
         await m.edit(
-            f"Tera video play kar rha hu aaja vc\n\nVideoName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}",
+            f"Playing your video\n\nVideoName:- [{title[:19]}]({link})\nDuration:- {duration}\nTime taken to play:- {total_time_taken}",
             disable_web_page_preview=True,
         )

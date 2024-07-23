@@ -76,6 +76,10 @@ async def _aSkip(_, message):
                 # return [title, duration, link, finish_time]
             except Exception as e:
                 return await app.send_message(chat_id, f"Error:- <code>{e}</code>")
+        else:
+            clear_queue(chat_id)
+            await stop(chat_id)
+            return await message.reply_text("Queue is empty")
     else:
         return await message.reply_text(
             "Sorry, because of users misuse, only admins are allowed to use this command!"
@@ -84,7 +88,6 @@ async def _aSkip(_, message):
 
 async def stop(chat_id):
     try:
-        await clear_queue(chat_id)
         await call.leave_call(chat_id)
     except:
         pass

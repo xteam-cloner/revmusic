@@ -1,4 +1,5 @@
 from YMusic import call
+from YMusic.utils.queue import clear_queue
 from pytgcalls.types import MediaStream
 
 audio_file = "http://docs.evostream.com/sample_content/assets/sintel1m720p.mp4"
@@ -84,6 +85,7 @@ async def changeVolume(chat_id, volume: int = 200):
 
 async def stop(chat_id):
     try:
+        clear_queue(chat_id)
         await call.leave_call(
             chat_id,
         )

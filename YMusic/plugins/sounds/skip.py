@@ -84,6 +84,7 @@ async def _aSkip(_, message):
 
 async def stop(chat_id):
     try:
+        await clear_queue(chat_id)
         await call.leave_call(chat_id)
     except:
         pass

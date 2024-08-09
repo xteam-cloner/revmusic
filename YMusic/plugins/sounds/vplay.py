@@ -3,7 +3,7 @@ from YMusic import app
 from YMusic.core import userbot
 from YMusic.utils.ytDetails import searchYt, extract_video_id
 from YMusic.utils.queue import QUEUE, add_to_queue
-
+from YMusic.plugins.sounds.play import ytdl
 from pyrogram import filters
 
 
@@ -17,20 +17,6 @@ VIDEO_PLAY = ["VP", "VPLAY"]
 PREFIX = config.PREFIX
 
 RPREFIX = config.RPREFIX
-
-
-async def ytdl(format: str, link: str):
-    if os.path.exists("www.youtube.com_cookies.txt"):
-        stdout, stderr = await bash(
-            f'yt-dlp --cookies www.youtube.com_cookies.txt --geo-bypass -g -f "{format}" {link}'
-        )
-    else:
-        stdout, stderr = await bash(
-            f'yt-dlp --geo-bypass -g -f "{format}" {link}'
-        )
-    if stdout:
-        return 1, stdout
-    return 0, stderr
 
 
 async def bash(cmd):

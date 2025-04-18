@@ -1,7 +1,7 @@
 import os
 from YMusic import app
 from YMusic.core import userbot
-from YMusic.utils.ytDetails import searchYt, extract_video_id
+from YMusic.utils.ytDetails import search_api, searchYt, extract_video_id
 from YMusic.utils.queue import QUEUE, add_to_queue
 from YMusic.plugins.sounds.play import ytdl
 from pyrogram import filters
@@ -95,17 +95,33 @@ async def _vPlay(_, message):
         video_id = extract_video_id(query)
         is_videoId = True if video_id is not None else False
         video_id = query if video_id is None else video_id
+        is_alt_method = False
         try:
             title, duration, link = searchYt(video_id, is_videoId)
             if (title, duration, link) == (None, None, None):
                 return await m.edit("No results found")
         except Exception as e:
-            await message.reply_text(f"Error:- <code>{e}</code>")
-            return
+            if "This request was detected as a bot" in str(e):
+                await m.edit(
+                    "This request was detected as a bot... Switching to alternate method"
+                )
+                title, duration, ytlink = search_api(video_id, is_videoId, True)
+                is_alt_method = True
+                link = None
+                if (title, duration, ytlink) == (None, None, None):
+                    return await m.edit("No results found")
+                if ytlink is None:
+                    return await m.edit("No results found")
+            else:
+                await message.reply_text(f"Error:- <code>{e}</code>")
+                await m.delete()
+                return
 
         await m.edit("Please wait downloading video of requested song")
-        format = "best[height<=?720][width<=?1280]"
-        resp, ytlink = await ytdl(format, link)
+        resp = 1
+        if not is_alt_method:
+            format = "best[height<=?720][width<=?1280]"
+            resp, ytlink = await ytdl(format, link)
         if resp == 0:
             await m.edit(f"❌ yt-dl issues detected\n\n» `{ytlink}`")
         else:

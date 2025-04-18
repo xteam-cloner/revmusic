@@ -34,7 +34,7 @@ async def playVideo(chat_id, video_file=audio_file):
 
 async def pause(chat_id):
     try:
-        await call.pause_stream(
+        await call.pause(
             chat_id,
         )
         return "Stream Paused"
@@ -44,7 +44,7 @@ async def pause(chat_id):
 
 async def resume(chat_id):
     try:
-        await call.resume_stream(
+        await call.resume(
             chat_id,
         )
         return "Stream Resumed"

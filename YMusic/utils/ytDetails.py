@@ -27,7 +27,7 @@ def search_api(query, is_videoId=False, video=False):
     query = str(query)
     if is_videoId:
         response = requests.get(
-            f"{API_URL}download/ytmp3?url=https://youtube.com/watch?v=" + query
+            f"{API_URL}download/{'ytmp4' if video else 'ytmp3'}?url=https://youtube.com/watch?v=" + query
         )
         data = response.json()
         if data["success"]:

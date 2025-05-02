@@ -54,7 +54,7 @@ async def resume(chat_id):
 
 async def mute(chat_id):
     try:
-        await call.mute_stream(
+        await call.mute(
             chat_id,
         )
         return "Stream Muted"
@@ -64,7 +64,7 @@ async def mute(chat_id):
 
 async def unmute(chat_id):
     try:
-        await call.unmute_stream(
+        await call.unmute(
             chat_id,
         )
         return "Stream Unmuted"

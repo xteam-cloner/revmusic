@@ -2,7 +2,7 @@ import aiohttp
 from pytubefix import Search, YouTube as pyYouTube, Playlist
 from urllib.parse import urlparse, parse_qs
 
-API_URL = "api.nekoo.qzz.io"
+API_URL = "https://api.nekoo.qzz.io/"
 
 
 def searchYt(query, is_videoId=False):

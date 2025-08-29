@@ -33,7 +33,7 @@ async def search_api(query, is_videoId=False, video=False):
             ) as response:
                 data = await response.json()
                 print(data)
-                if data["status"] and data["statusCode"] == 200:
+                if data["status"]:
                     result = data["result"]
                     title = result["title"]
                     duration = result["duration"]
@@ -45,7 +45,7 @@ async def search_api(query, is_videoId=False, video=False):
             ) as response:
                 data = await response.json()
                 print(data)
-                if data["status"] and data["statusCode"] == 200:
+                if data["status"]:
                     result = data["result"]
                     title = result["metadata"]["title"]
                     duration = result["metadata"]["duration"]

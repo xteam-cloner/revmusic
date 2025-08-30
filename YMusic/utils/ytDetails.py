@@ -2,11 +2,11 @@ import aiohttp
 from pytubefix import Search, YouTube as pyYouTube, Playlist
 from urllib.parse import urlparse, parse_qs
 
-API_URL = "https://api.nekoo.qzz.io/"
+API_URL = "https://apis.davidcyriltech.my.id/"
 
 
 def searchYt(query, is_videoId=False):
-    raise Exception("This request was detected as a bot")
+    # raise Exception("This request was detected as a bot")
     query = str(query)
     if is_videoId:
         video = pyYouTube(f"https://www.youtube.com/watch?v={query}")
@@ -29,40 +29,55 @@ async def search_api(query, is_videoId=False, video=False):
     async with aiohttp.ClientSession() as session:
         if is_videoId:
             async with session.get(
-                f"{API_URL}downloader/savetube?url=https://youtube.com/watch?v={query}&format={'720' if video else 'mp3'}"
+                f"{API_URL}download/ytmp4?url=https://youtube.com/watch?v={query}"
             ) as response:
                 data = await response.json()
                 print(data)
-                if data["status"]:
+                if data["status"] == 200:
                     result = data["result"]
                     title = result["title"]
-                    duration = result["duration"]
-                    link = result["download"]
+                    duration = "N/A"
+                    link = result["download_url"]
                     return title, duration, link
         else:
             async with session.get(
-                f"{API_URL}downloader/spotifyplay?q={query}", ssl=False
+                f"{API_URL}search/spotify?text={query}", ssl=False
             ) as response:
                 data = await response.json()
                 print(data)
-                if data["status"]:
-                    result = data["result"]
-                    title = result["metadata"]["title"]
-                    duration = result["metadata"]["duration"]
-                    link = result["downloadUrl"]
-                    return title, duration, link
+                if data.get("success") and len(data.get("result", [])) > 0:
+                    first_result = data["result"][0]
+                    spotify_url = first_result["externalUrl"]
+                    async with session.get(
+                        f"{API_URL}spotifydl?url={spotify_url}"
+                    ) as dl_response:
+                        dl_data = await dl_response.json()
+                        print(dl_data)
+                        if dl_data.get("success") and dl_data.get("status") == 200:
+                            title = dl_data["title"]
+                            duration = dl_data.get("duration", "N/A")
+                            link = dl_data["DownloadLink"]
+                            return title, duration, link
                 else:
                     async with session.get(
-                        f"https://node01.dlapi.app/api/downloader/ytplay-savetube?q={query}"
+                        f"{API_URL}youtube/search?query={query.replace(' ', '+')}"
                     ) as response:
                         data = await response.json()
                         print(data)
-                        if data["status"] and data["statusCode"] == 200:
-                            result = data["result"]
-                            title = result["metadata"]["title"]
-                            duration = result["metadata"]["duration"]
-                            link = result["downloadUrl"]
-                            return title, duration, link
+                        if data.get("status") and len(data.get("results", [])) > 0:
+                            first_result = data["results"][0]
+                            video_url = first_result["url"]
+                            async with session.get(
+                                f"{API_URL}download/ytmp3?url={video_url}"
+                            ) as dl_response:
+                                dl_data = await dl_response.json()
+                                print(dl_data)
+                                if dl_data.get("success") and dl_data.get("status") == 200:
+                                    result = dl_data["result"]
+                                    title = result["title"]
+                                    duration = first_result.get("duration", "N/A")
+                                    link = result["download_url"]
+                                    return title, duration, link
 
     return None, None, None
 

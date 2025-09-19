@@ -2,7 +2,7 @@ import aiohttp
 from pytubefix import Search, YouTube as pyYouTube, Playlist
 from urllib.parse import urlparse, parse_qs
 
-API_URL = "https://apis.davidcyriltech.my.id/"
+API_URL = "https://dab.yeet.su/api"
 
 
 def searchYt(query, is_videoId=False):
@@ -24,60 +24,27 @@ def searchYt(query, is_videoId=False):
     return None, None, None
 
 
-async def search_api(query, is_videoId=False, video=False):
+async def search_api(query):
     query = str(query)
     async with aiohttp.ClientSession() as session:
-        if is_videoId:
-            async with session.get(
-                f"{API_URL}download/ytmp4?url=https://youtube.com/watch?v={query}"
-            ) as response:
-                data = await response.json()
-                print(data)
-                if data["status"] == 200:
-                    result = data["result"]
-                    title = result["title"]
-                    duration = "N/A"
-                    link = result["download_url"]
-                    return title, duration, link
-        else:
-            async with session.get(
-                f"{API_URL}search/spotify?text={query}", ssl=False
-            ) as response:
-                data = await response.json()
-                print(data)
-                if data.get("success") and len(data.get("result", [])) > 0:
-                    first_result = data["result"][0]
-                    spotify_url = first_result["externalUrl"]
-                    async with session.get(
-                        f"{API_URL}spotifydl?url={spotify_url}"
-                    ) as dl_response:
-                        dl_data = await dl_response.json()
-                        print(dl_data)
-                        if dl_data.get("success") and dl_data.get("status") == 200:
-                            title = dl_data["title"]
-                            duration = dl_data.get("duration", "N/A")
-                            link = dl_data["DownloadLink"]
-                            return title, duration, link
-                else:
-                    async with session.get(
-                        f"{API_URL}youtube/search?query={query.replace(' ', '+')}"
-                    ) as response:
-                        data = await response.json()
-                        print(data)
-                        if data.get("status") and len(data.get("results", [])) > 0:
-                            first_result = data["results"][0]
-                            video_url = first_result["url"]
-                            async with session.get(
-                                f"{API_URL}download/ytmp3?url={video_url}"
-                            ) as dl_response:
-                                dl_data = await dl_response.json()
-                                print(dl_data)
-                                if dl_data.get("success") and dl_data.get("status") == 200:
-                                    result = dl_data["result"]
-                                    title = result["title"]
-                                    duration = first_result.get("duration", "N/A")
-                                    link = result["download_url"]
-                                    return title, duration, link
+        async with session.get(
+            f"{API_URL}/search?q={query.replace(' ', '+')}&offset=0&type=track"
+        ) as response:
+            data = await response.json()
+            print(data)
+            if "tracks" in data and len(data["tracks"]) > 0:
+                first_result = data["tracks"][0]
+                track_id = first_result["id"]
+                async with session.get(
+                    f"{API_URL}/stream?trackId={track_id}"
+                ) as dl_response:
+                    dl_data = await dl_response.json()
+                    print(dl_data)
+                    if "url" in dl_data:
+                        title = first_result["title"]
+                        duration = first_result.get("duration", "N/A")
+                        link = dl_data["url"]
+                        return title, duration, link
 
     return None, None, None
 

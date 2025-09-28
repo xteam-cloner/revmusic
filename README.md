@@ -36,7 +36,10 @@ cd YMusic-Userbot && pip install -r requirements.txt
 ```
 
 ### Fill the required data in "config/config.py" file
-
+```sh
+cp sample.env .env
+vi .env
+```
 You can get the required data from [here](https://my.telegram.org/)
 
 ### Generate String Session using the following command
@@ -124,3 +127,4 @@ bash start
 ---------
 
 ### Thanks :)
+

@@ -4,7 +4,7 @@ from pytgcalls import PyTgCalls
 import config
 from ..logging import LOGGER
 
-api_id: int = confg.API_ID
+api_id: int = config.API_ID
 api_hash: str = config.API_HASH
 session_string: str = config.SESSION_STRING
 

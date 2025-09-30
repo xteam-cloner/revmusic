@@ -28,11 +28,11 @@ sudo apt update && sudo apt upgrade -y && sudo apt install python3 git ffmpeg -y
 ```
 
 ```sh
-git clone https://github.com/EnhancedProtection/YMusic-Userbot.git
+git clone https://github.com/xteam-cloner/revmusic
 ```
 
 ```sh
-cd YMusic-Userbot && pip install -r requirements.txt
+cd revmusic && pip install -r requirements.txt
 ```
 
 ### Fill the required data in "config/config.py" file
@@ -127,4 +127,5 @@ bash start
 ---------
 
 ### Thanks :)
+
 

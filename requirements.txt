@@ -1,4 +1,4 @@
-pyrofork
+kurigram
 git+https://github.com/pytgcalls/pytgcalls
 git+https://github.com/xteam-cloner/xteam
 yt-dlp
